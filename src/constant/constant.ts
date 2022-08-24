@@ -1,0 +1,4 @@
+export enum APPLICATIONCONSTANT {
+    ERR_USERNAME_IS_USED = 1,
+    ERR_EMAIL_IS_USED = 2,
+}

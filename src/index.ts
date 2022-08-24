@@ -3,8 +3,9 @@ import express from 'express';
 import bodyParser from 'body-parser'
 var port = process.env.PORT || 1908;
 const app = express();
-
-
+import authRouter from './routes/auth.route';
+import dotenv from 'dotenv'
+dotenv.config();
 /** CORS */
 const options: CorsOptions = {
     origin: '*',
@@ -18,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 /** Router */
-// app.use('/api/user',userRouter);
+app.use('/api/auth',authRouter);
 app.get("/", (req, resp) => {
     console.log("Hello Server")
     return resp.status(200).json({
