@@ -1,11 +1,11 @@
 import cors, { CorsOptions } from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser'
-var port = process.env.PORT || 1908;
 const app = express();
 import authRouter from './routes/auth.route';
 import dotenv from 'dotenv'
 dotenv.config();
+var port = process.env.PORT || 8081;
 /** CORS */
 const options: CorsOptions = {
     origin: '*',

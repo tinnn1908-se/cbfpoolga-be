@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
-var port = process.env.PORT || 1908;
 var app = (0, express_1.default)();
 var auth_route_1 = __importDefault(require("./routes/auth.route"));
 var dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+var port = process.env.PORT || 8081;
 /** CORS */
 var options = {
     origin: '*',
