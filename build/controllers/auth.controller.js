@@ -46,7 +46,7 @@ var AuthController = /** @class */ (function () {
     }
     AuthController.register = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var username, password, email, id, created_date, user, isCreated;
+            var username, password, email, id, created_date, user, isCreated, isExistedUsername, isExistedEmail;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -55,16 +55,20 @@ var AuthController = /** @class */ (function () {
                         email = request.body.email;
                         id = helper_1.default.generateID();
                         created_date = helper_1.default.getCurrentDateTime();
-                        user = { id: id, username: username, password: password, email: email, created_date: created_date, is_deleted: false };
+                        user = { id: id, username: username, password: password, email: email, created_date: created_date, is_activated: false, is_deleted: false };
                         return [4 /*yield*/, user_queries_1.default.createUser(user)];
                     case 1:
                         isCreated = _a.sent();
+                        return [4 /*yield*/, user_queries_1.default.isExistedUsername(username)];
+                    case 2:
+                        isExistedUsername = _a.sent();
+                        return [4 /*yield*/, user_queries_1.default.isExistedEmail(email)];
+                    case 3:
+                        isExistedEmail = _a.sent();
                         console.log(user);
-                        if (isCreated)
+                        if (isCreated && !isExistedEmail && !isExistedUsername)
                             return [2 /*return*/, response.status(200).json({ user: user })];
-                        return [2 /*return*/, response.status(304).json({
-                                'message': 'Create User Failed !'
-                            })];
+                        return [2 /*return*/, response.status(304).json('Create User Failed !')];
                 }
             });
         });

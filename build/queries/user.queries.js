@@ -51,7 +51,7 @@ var UserQuery = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         _a.trys.push([2, 4, 5, 6]);
-                        sql = "insert into users \n            values('".concat(user.id, "','").concat(user.username, "','").concat(user.password, "',\n            '").concat(user.email, "','").concat(user.created_date, "',").concat(user.is_deleted, ")");
+                        sql = "insert into users \n            values('".concat(user.id, "','").concat(user.username, "','").concat(user.password, "',\n            '").concat(user.email, "','").concat(user.created_date, "',").concat(user.is_activated, ",").concat(user.is_deleted, ")");
                         return [4 /*yield*/, connection.query(sql)];
                     case 3:
                         result = (_a.sent())[0];

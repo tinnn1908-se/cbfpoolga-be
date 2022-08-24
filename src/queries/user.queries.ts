@@ -7,7 +7,7 @@ export default class UserQuery {
         try {
             var sql = `insert into users 
             values('${user.id}','${user.username}','${user.password}',
-            '${user.email}','${user.created_date}',${user.is_deleted})`;
+            '${user.email}','${user.created_date}',${user.is_activated},${user.is_deleted})`;
             var [result,] = await connection.query(sql);
             if (Number(result.affectedRows > 0)) {
                 return true;
