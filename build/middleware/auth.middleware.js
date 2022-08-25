@@ -28,9 +28,12 @@ var AuthMiddleWare = /** @class */ (function () {
         var secretKey = process.env.ACCESS_TOKEN_SECRET;
         var accessToken = '';
         if (secretKey) {
-            accessToken = jsonwebtoken_1.default.sign({ user: user }, secretKey, {
-                expiresIn: '3600s'
-            });
+            try {
+                accessToken = jsonwebtoken_1.default.sign({ user: user }, secretKey, { expiresIn: '3600s', algorithm: 'HS256' });
+            }
+            catch (error) {
+                console.log(error);
+            }
         }
         return accessToken;
     };

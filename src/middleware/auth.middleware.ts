@@ -18,13 +18,15 @@ export default class AuthMiddleWare {
             }
         }
     }
-    static generateToken(user: User) {
+    static generateToken(user: User): string {
         var secretKey = process.env.ACCESS_TOKEN_SECRET;
         var accessToken = '';
         if (secretKey) {
-            accessToken = jwt.sign({ user }, secretKey, {
-                expiresIn: '3600s'
-            })
+            try {
+                accessToken = jwt.sign({ user }, secretKey, { expiresIn: '3600s', algorithm: 'HS256' });
+            } catch (error) {
+                console.log(error)
+            }
         }
         return accessToken;
     }

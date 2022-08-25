@@ -7,3 +7,15 @@ export interface User {
     is_activated: boolean,
     is_deleted: boolean
 }
+export interface IEmail {
+    serviceID : string, 
+    templateID : string, 
+    userID : string,
+    email : string
+}
+export const initialEmail : IEmail =  {
+    serviceID : '', 
+    templateID : '', 
+    userID : '',
+    email : ''
+}
