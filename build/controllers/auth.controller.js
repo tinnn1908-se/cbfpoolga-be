@@ -40,13 +40,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var helper_1 = __importDefault(require("../helper"));
+var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var user_queries_1 = __importDefault(require("../queries/user.queries"));
 var AuthController = /** @class */ (function () {
     function AuthController() {
     }
     AuthController.register = function (request, response) {
         return __awaiter(this, void 0, void 0, function () {
-            var username, password, email, id, created_date, user, isCreated, isExistedUsername, isExistedEmail;
+            var username, password, email, id, created_date, user, isCreated, isExistedUsername, isExistedEmail, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -56,20 +57,39 @@ var AuthController = /** @class */ (function () {
                         id = helper_1.default.generateID();
                         created_date = helper_1.default.getCurrentDateTime();
                         user = { id: id, username: username, password: password, email: email, created_date: created_date, is_activated: false, is_deleted: false };
-                        return [4 /*yield*/, user_queries_1.default.createUser(user)];
-                    case 1:
-                        isCreated = _a.sent();
+                        console.log("user : " + Object.values(user));
+                        isCreated = false;
                         return [4 /*yield*/, user_queries_1.default.isExistedUsername(username)];
-                    case 2:
+                    case 1:
                         isExistedUsername = _a.sent();
                         return [4 /*yield*/, user_queries_1.default.isExistedEmail(email)];
-                    case 3:
+                    case 2:
                         isExistedEmail = _a.sent();
-                        console.log(user);
-                        if (isCreated && !isExistedEmail && !isExistedUsername)
-                            return [2 /*return*/, response.status(200).json({ user: user })];
+                        token = auth_middleware_1.default.generateToken(user);
+                        if (!(!isExistedEmail && !isExistedUsername && token.length > 0)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, user_queries_1.default.createUser(user)];
+                    case 3:
+                        isCreated = _a.sent();
+                        _a.label = 4;
+                    case 4:
+                        if (isCreated)
+                            return [2 /*return*/, response.status(200).json({
+                                    "access_token": "".concat(token)
+                                })];
                         return [2 /*return*/, response.status(304).json('Create User Failed !')];
                 }
+            });
+        });
+    };
+    AuthController.verifyEmail = function (request, response) {
+        return __awaiter(this, void 0, void 0, function () {
+            var token;
+            return __generator(this, function (_a) {
+                token = request.params.token;
+                console.log('verifyEmail');
+                if (token)
+                    return [2 /*return*/, response.status(200).json("token : ".concat(token))];
+                return [2 /*return*/, response.status(404).json('Failed Verified')];
             });
         });
     };
