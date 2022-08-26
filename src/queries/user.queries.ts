@@ -5,6 +5,7 @@ export default class UserQuery {
     static async createUser(user: User) {
         var connection = await getConnection();
         try {
+            console.log('hashed password : ' + user.password)
             var sql = `insert into users 
             values('${user.id}','${user.username}','${user.password}',
             '${user.email}','${user.created_date}',${user.is_activated},${user.is_deleted})`;
@@ -46,6 +47,45 @@ export default class UserQuery {
             return false;
         } finally {
             connection.end();
+        }
+    }
+    static async activateUser(userID: string) {
+        try {
+            var connection = await getConnection();
+            var sql = `update users set is_activated = true where id = '${userID}'`
+            var [result,] = await connection.query(sql);
+            if (Number(result.affectedRows) > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            return false;
+        }
+    }
+    static async getUserByUsername(username: string) {
+        try {
+            var connection = await getConnection();
+            var sql = `select * from users u where u.username = '${username}' and u.is_activated = true`
+            var [result,] = await connection.query(sql);
+            console.log('getUserByUsername : ' + Object.values(result[0]))
+            return result[0];
+        } catch (error) {
+            console.log(error)
+            return null;
+        }
+    }
+    static async getUserByEmail(email: string) {
+        try {
+            console.log('getUserByEmail : ' + email)
+            var connection = await getConnection();
+            var sql = `SELECT * FROM users u where u.email = 'tinnn1908.se@gmail.com' and u.is_activated = true`
+            var [result,] = await connection.query(sql);
+            console.log('getUserByEmail : ' + Object.values(result[0]))
+            return result[0];
+        } catch (error) {
+            console.log(error)
+            return null;
         }
     }
 }
