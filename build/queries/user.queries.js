@@ -51,6 +51,7 @@ var UserQuery = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         _a.trys.push([2, 4, 5, 6]);
+                        console.log('hashed password : ' + user.password);
                         sql = "insert into users \n            values('".concat(user.id, "','").concat(user.username, "','").concat(user.password, "',\n            '").concat(user.email, "','").concat(user.created_date, "',").concat(user.is_activated, ",").concat(user.is_deleted, ")");
                         return [4 /*yield*/, connection.query(sql)];
                     case 3:
@@ -127,6 +128,86 @@ var UserQuery = /** @class */ (function () {
                         connection.end();
                         return [7 /*endfinally*/];
                     case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserQuery.activateUser = function (userID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var connection, sql, result, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, (0, db_1.getConnection)()];
+                    case 1:
+                        connection = _a.sent();
+                        sql = "update users set is_activated = true where id = '".concat(userID, "'");
+                        return [4 /*yield*/, connection.query(sql)];
+                    case 2:
+                        result = (_a.sent())[0];
+                        if (Number(result.affectedRows) > 0) {
+                            return [2 /*return*/, true];
+                        }
+                        else {
+                            return [2 /*return*/, false];
+                        }
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_4 = _a.sent();
+                        return [2 /*return*/, false];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserQuery.getUserByUsername = function (username) {
+        return __awaiter(this, void 0, void 0, function () {
+            var connection, sql, result, error_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, (0, db_1.getConnection)()];
+                    case 1:
+                        connection = _a.sent();
+                        sql = "select * from users u where u.username = '".concat(username, "' and u.is_activated = true");
+                        return [4 /*yield*/, connection.query(sql)];
+                    case 2:
+                        result = (_a.sent())[0];
+                        console.log('getUserByUsername : ' + Object.values(result[0]));
+                        return [2 /*return*/, result[0]];
+                    case 3:
+                        error_5 = _a.sent();
+                        console.log(error_5);
+                        return [2 /*return*/, null];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserQuery.getUserByEmail = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            var connection, sql, result, error_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        console.log('getUserByEmail : ' + email);
+                        return [4 /*yield*/, (0, db_1.getConnection)()];
+                    case 1:
+                        connection = _a.sent();
+                        sql = "SELECT * FROM users u where u.email = 'tinnn1908.se@gmail.com' and u.is_activated = true";
+                        return [4 /*yield*/, connection.query(sql)];
+                    case 2:
+                        result = (_a.sent())[0];
+                        console.log('getUserByEmail : ' + Object.values(result[0]));
+                        return [2 /*return*/, result[0]];
+                    case 3:
+                        error_6 = _a.sent();
+                        console.log(error_6);
+                        return [2 /*return*/, null];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

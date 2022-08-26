@@ -8,14 +8,19 @@ export interface User {
     is_deleted: boolean
 }
 export interface IEmail {
-    serviceID : string, 
-    templateID : string, 
-    userID : string,
-    email : string
+    serviceID: string,
+    templateID: string,
+    userID: string,
+    email: string
 }
-export const initialEmail : IEmail =  {
-    serviceID : '', 
-    templateID : '', 
-    userID : '',
-    email : ''
+export const initialEmail: IEmail = {
+    serviceID: '',
+    templateID: '',
+    userID: '',
+    email: ''
 }
+export interface SigninRequest {
+    username: string,
+    email: string,
+    password: string
+} 
