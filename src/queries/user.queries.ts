@@ -1,5 +1,6 @@
 import { getConnection } from "../db";
-import { User } from "../model";
+import MyHelper from "../helper";
+import { Picking, Pickingdetail, User } from "../model";
 
 export default class UserQuery {
     static async createUser(user: User) {
@@ -88,4 +89,90 @@ export default class UserQuery {
             return null;
         }
     }
+    static async createPickingDetail(pickingDetails: Pickingdetail, pickingID: string) {
+        var connection = await getConnection();
+        //
+        try {
+            var sql = `insert into pickingdetails values('${pickingDetails.pickingDetailId}',
+            '${pickingDetails.awayteam}',${pickingDetails.awayscore},${pickingDetails.awaynumber},
+            '${pickingDetails.hometeam}',${pickingDetails.homescore},${pickingDetails.homenumber},
+            '${pickingDetails.selected_team}',${pickingDetails.isLastgame},'${pickingID}');`;
+            var [result,] = await connection.query(sql);
+            if (Number(result.affectedRows > 0)) {
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.log('error : ' + error);
+            return false;
+        } finally {
+            connection.end();
+        }
+    }
+    static async createPicking(picking: Picking, lastCounter: number) {
+        var connection = await getConnection();
+        //
+        try {
+            var sql = `insert into pickings values ('${picking.id}','${picking.entry}','${picking.username}',${picking.tiebreak},'${MyHelper.getCurrentDateTime()}',${lastCounter + 1})`;
+            console.log('sql : ' + sql)
+            var [result,] = await connection.query(sql);
+            if (Number(result.affectedRows > 0)) {
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.log('error : ' + error);
+            return false;
+        } finally {
+            connection.end();
+        }
+    }
+    static async getLastCounter() {
+        var connection = await getConnection();
+        //
+        try {
+            var sql = 'select * from pickings order by counter';
+            var [result,] = await connection.query(sql);
+
+            if (typeof result[0] === 'undefined') {
+                return 0
+            } else {
+                console.log('lastCounter : ' + Number(result[0].counter))
+                return Number(result[0].counter);
+            }
+        } catch (error) {
+            console.log('error : ' + error);
+            return false;
+        } finally {
+            connection.end();
+        }
+    }
+    static async getAllPickingsInWeek() {
+        var connection = await getConnection();
+        //
+        try {
+            var sql = `select * from pickings`;
+            var [result,] = await connection.query(sql);
+            return result;
+        } catch (error) {
+            console.log('error : ' + error);
+            return null;
+        } finally {
+            connection.end();
+        }
+    }
+    static async getPickingDetailsByPickingID(pickingID: string) {
+        var connection = await getConnection();
+        try {
+            var sql = `select * from pickingdetails where picking_id = '${pickingID}';`;
+            var [result,] = await connection.query(sql);
+            return result;
+        } catch (error) {
+            console.log('error : ' + error);
+            return null;
+        } finally {
+            connection.end();
+        }
+    }
+
 }

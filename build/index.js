@@ -9,6 +9,7 @@ var body_parser_1 = __importDefault(require("body-parser"));
 var app = (0, express_1.default)();
 var auth_route_1 = __importDefault(require("./routes/auth.route"));
 var dotenv_1 = __importDefault(require("dotenv"));
+var user_route_1 = __importDefault(require("./routes/user.route"));
 dotenv_1.default.config();
 var port = process.env.PORT || 8081;
 /** CORS */
@@ -23,6 +24,7 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
 /** Router */
 app.use('/api/auth', auth_route_1.default);
+app.use('/api/user', user_route_1.default);
 app.get("/", function (req, resp) {
     console.log("Hello Server");
     return resp.status(200).json({
